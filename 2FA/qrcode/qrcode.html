@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon-32x32.png"
+    />
+
+    <title>Frontend Mentor | QR code component</title>
+
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <div class="container">
+        <div class="img-container">
+          <img src="data:image/png;base64,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" alt="">
+        </div>
+        <article>
+          <h1>Scan QR Code with -google Authenticator</h1>
+          <p>
+            You will then have access to the website after confirming qrcode
+          </p>
+        </article>
+      </div>
+    </main>
+  </body>
+</html>

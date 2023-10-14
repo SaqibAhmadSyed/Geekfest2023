@@ -39,40 +39,15 @@
                         <a href="#" class="social-icon">
                             <i class="fab fa-linkedin-in"></i>
                         </a>
+
                     </div>
                 </form>
             </div>
         </div>
-        <div class="panels-container"></div>
+        <div class="panels-container">
+
+        </div>
         <script src="./app.js"></script>
-
-        <script>
-            function validateSignIn() {
-                // Get values from the input fields
-                var username = document.getElementById("signInUsername").value;
-                var password = document.getElementById("signInPassword").value;
-
-                // no neeed to check username for the sake of the project
-                // Check if password is entered
-                if (password.trim() === "") {
-                    alert("Please enter a password.");
-                } else {
-                    // You can perform further actions here, like sending a request to a server for authentication.
-                    // For now, we'll just display an alert.
-                    if (password.length < 8) {
-                        alert("Password must be at least 8 characters long.");
-                    } else if (!/[a-z]/.test(password)) {
-                        alert("Password must contain at least one lowercase letter.");
-                    } else if (!/[A-Z]/.test(password)) {
-                        alert("Password must contain at least one uppercase letter.");
-                    } else if (!/[0-9]/.test(password)) {
-                        alert("Password must contain at least one number.");
-                    } else {
-                        alert("Sign In Successful!");
-                    }
-                }
-            }
-        </script>
     </div>
 </body>
 
