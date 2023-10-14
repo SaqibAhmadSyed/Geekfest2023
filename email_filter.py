@@ -49,21 +49,5 @@ def detect_phishing():
                 if any(keyword.lower() in mail_subject.lower() for keyword in PHISHING_KEYWORDS):
                     print(f'The following email {mail_from} has been flagged for phishing')   
 
-def password_encryption():
-    # Input password with minimum 8 characters
-    password = getpass.getpass('Enter your password (minimum 8 characters): ')
-
-    # Check if the password meets the minimum length requirement
-    while len(password) < 8:
-        print('Password must be at least 8 characters long.')
-        password = getpass.getpass('Enter your password (minimum 8 characters): ')
-
-    # Replace characters with '*'
-    masked_password = '*' * len(password)
-
-    # Now, you can use the 'password' variable containing the entered password
-    print('Password entered:', masked_password)
-
 
 # detect_phishing()
-password_encryption()
