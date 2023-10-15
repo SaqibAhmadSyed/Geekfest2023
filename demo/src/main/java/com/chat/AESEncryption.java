@@ -14,6 +14,7 @@ import java.io.IOException;
 
 public class AESEncryption {
 
+
     private static final String ALGORITHM = "AES";
     private static final String KEY_FILE_PATH = "aes_key.txt";  // Path to the key file
     private SecretKey secretKey;
@@ -23,9 +24,10 @@ public class AESEncryption {
             Path keyFilePath = Paths.get(KEY_FILE_PATH);
 
             if (Files.exists(keyFilePath)) {
-                // Key file exists, read the key from the file
+                // Key file exists, read the key and key size from the file
                 byte[] keyBytes = Files.readAllBytes(keyFilePath);
-                this.secretKey = new SecretKeySpec(keyBytes, ALGORITHM);
+                int keySize = keyBytes[0];  // Assuming the first byte is the key size
+                this.secretKey = new SecretKeySpec(keyBytes, 1, keySize, ALGORITHM);
             } else {
                 // Key file does not exist, generate a new key and save it
                 generateAndSaveKey();
@@ -44,8 +46,11 @@ public class AESEncryption {
             keyGenerator.init(128);
             this.secretKey = keyGenerator.generateKey();
 
-            // Save the key to the file
-            Files.write(Paths.get(KEY_FILE_PATH), secretKey.getEncoded());
+            // Save the key size and key to the file
+            byte[] keyBytes = new byte[1 + secretKey.getEncoded().length];
+            keyBytes[0] = (byte) secretKey.getEncoded().length;
+            System.arraycopy(secretKey.getEncoded(), 0, keyBytes, 1, secretKey.getEncoded().length);
+            Files.write(Paths.get(KEY_FILE_PATH), keyBytes);
 
         } catch (Exception e) {
             e.printStackTrace();

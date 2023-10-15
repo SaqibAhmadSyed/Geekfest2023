@@ -80,33 +80,35 @@ public class ChatServer {
                 System.out.println("SERVER> Client Message Received: " + requestBody);
                 // Process the client's request.
                 switch (requestCommand) {
-                    case ProtocolConstants.CMD_GET_TIME -> {
-                        Date currentDate = new Date();
-                        String dateString = currentDate.toString();
-                    
-                        // Encrypt the date string using AESEncryption
-                        byte[] encryptedBytes = AESEnc.encrypt(dateString);
-                    
-                        // Print the encrypted message as characters using UTF-8 encoding
-                        String encryptedString = new String(encryptedBytes, StandardCharsets.UTF_8);
-                        System.out.println("SERVER> Encrypted message sent: " + encryptedString);
-                    
-                        // Send the encrypted bytes to the client
-                        OutputStream outputStream = clientSocket.getOutputStream();
-                        outputStream.write(encryptedBytes, 0, encryptedBytes.length);
-                        outputStream.flush();
-                    
-                        counter++;
-                        System.out.println("SERVER> Successful!");
-                    }
+// Server side
+case ProtocolConstants.CMD_GET_TIME -> {
+    Date currentDate = new Date();
+    String dateString = currentDate.toString();
+
+    // Encrypt the date string using AESEncryption
+    byte[] encryptedBytes = AESEnc.encrypt(dateString);
+
+    // Print the encrypted message as characters using UTF-8 encoding
+    String encryptedHex = bytesToHex(encryptedBytes);
+    System.out.println("SERVER> Encrypted message sent (Hex): " + encryptedHex);
+
+    // Send the encrypted hex string to the client
+    outputToClient = new PrintWriter(clientSocket.getOutputStream(), true);
+    outputToClient.println(encryptedHex);
+    outputToClient.flush();
+
+    counter++;
+    System.out.println("SERVER> Successful!");
+}
+
                     case ProtocolConstants.CMD_GET_DOMAIN -> {
                         // Send back server's domain.
                         String domain = "www.geekfest2023.com";
                         byte[] encryptedBytes = AESEnc.encrypt(domain);
                     
                         // Print the encrypted message as characters using UTF-8 encoding
-                        String encryptedString = new String(encryptedBytes, StandardCharsets.UTF_8);
-                        System.out.println("SERVER> Encrypted message sent: " + encryptedString);
+                        String encryptedHex = bytesToHex(encryptedBytes);
+                        System.out.println("SERVER> Encrypted message sent: " + encryptedHex);
                     
                         OutputStream outputStream = clientSocket.getOutputStream();
                         outputStream.write(encryptedBytes, 0, encryptedBytes.length);
@@ -131,6 +133,18 @@ public class ChatServer {
             }
         }
     }
+
+// Helper method to convert byte array to hexadecimal string
+public static String bytesToHex(byte[] bytes) {
+    StringBuilder hexStringBuilder = new StringBuilder(2 * bytes.length);
+    for (byte b : bytes) {
+        hexStringBuilder.append(String.format("%02x", b));
+    }
+    return hexStringBuilder.toString();
+}
+
+
+
 
     public static void main(String[] args) throws Exception {
         ChatServer serverApp = new ChatServer();

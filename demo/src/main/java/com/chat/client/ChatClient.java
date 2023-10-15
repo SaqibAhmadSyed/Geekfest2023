@@ -69,25 +69,23 @@ public class ChatClient {
 
     private void askForTime() throws Exception {
         connectToServer();
-        
+    
         // Prepare the REQUEST to be sent to the server.
         outputToServer.println(ProtocolConstants.CMD_GET_TIME);
         outputToServer.println("What Time is It ?");
         outputToServer.flush();
     
         try {
-            // Receive the encrypted bytes from the server
-            InputStream inputStream = clientSocket.getInputStream();
-            byte[] encryptedBytes = new byte[128]; // Adjust the buffer size as needed
-            int bytesRead = inputStream.read(encryptedBytes, 0, encryptedBytes.length);
+            // Receive the encrypted hex string from the server
+            String encryptedHexString = inputFromServer.readLine();
+            System.out.println("CLIENT> Encrypted message of the time (Hex): " + encryptedHexString);
     
-            // Print the encrypted message as characters using UTF-8 encoding
-            String encryptedString = new String(encryptedBytes, StandardCharsets.UTF_8);
+            // Convert hex string to byte array
+            byte[] encryptedBytes = hexToBytes(encryptedHexString);
     
             // Decrypt the bytes using AESEncryption
-            String decryptedString = AESEnc.decrypt(Arrays.copyOf(encryptedBytes, bytesRead));
+            String decryptedString = AESEnc.decrypt(encryptedBytes);
             System.out.println("CLIENT> The current time is " + decryptedString);
-            System.out.println("CLIENT> Encrypted message of the time: " + encryptedString);
         } catch (IOException e) {
             System.out.println("CLIENT> Cannot receive time from server");
         }
@@ -95,34 +93,35 @@ public class ChatClient {
         disconnectFromServer();
     }
     
+    
 
     /**
      * Ask the server for domain
      */
     private void askForDomain() throws Exception {
+        connectToServer();
+    
+        // Prepare the REQUEST to be sent to the server.
+        outputToServer.println(ProtocolConstants.CMD_GET_TIME);
+        outputToServer.println("What is the domain of the server?");
+        outputToServer.flush();
+    
         try {
-            connectToServer();
-            outputToServer.println(ProtocolConstants.CMD_GET_DOMAIN);
-            outputToServer.println("What is the domain of the server?");
-            outputToServer.flush();
+            // Receive the encrypted hex string from the server
+            String encryptedHexString = inputFromServer.readLine();
+            System.out.println("CLIENT> Encrypted message of the domain (Hex): " + encryptedHexString);
     
-            InputStream inputStream = clientSocket.getInputStream();
-            byte[] encryptedBytes = new byte[128]; // Adjust the buffer size as needed
-            int bytesRead = inputStream.read(encryptedBytes, 0, encryptedBytes.length);
+            // Convert hex string to byte array
+            byte[] encryptedBytes = hexToBytes(encryptedHexString);
     
-            // Print the encrypted message as characters using UTF-8 encoding
-            String encryptedString = new String(encryptedBytes, StandardCharsets.UTF_8);
-    
-            // Decrypt the message
-            String decryptedString = AESEnc.decrypt(Arrays.copyOf(encryptedBytes, bytesRead));
-    
-            // Print the decrypted message
-            System.out.println("CLIENT> Server's domain is " + decryptedString);
-            System.out.println("CLIENT> Encrypted domain address: " + encryptedString);
-            disconnectFromServer();
-        } catch (IOException ex) {
-            Logger.getLogger(ChatClient.class.getName()).log(Level.SEVERE, null, ex);
+            // Decrypt the bytes using AESEncryption
+            String decryptedString = AESEnc.decrypt(encryptedBytes);
+            System.out.println("CLIENT> The domain is " + decryptedString);
+        } catch (IOException e) {
+            System.out.println("CLIENT> Cannot receive domain from server");
         }
+    
+        disconnectFromServer();
     }
     
 
@@ -158,6 +157,19 @@ public class ChatClient {
         }
     }
 
+    public static byte[] hexToBytes(String hex) {
+        int len = hex.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
+                                 + Character.digit(hex.charAt(i + 1), 16));
+        }
+        return data;
+    }
+    
+
+    
+    
     public static void main(String[] args) throws Exception {
         ChatClient client = new ChatClient();
         Delay();
