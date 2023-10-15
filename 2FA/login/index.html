@@ -48,6 +48,68 @@
 
         </div>
         <script src="./app.js"></script>
+
+        <script src="dist/bundle.js">
+            
+            import CryptoJS from crypto-js;
+
+           
+            function validateSignIn() {
+                
+                // Get values from the input fields
+                var username = document.getElementById("signInUsername").value;
+                var password = document.getElementById("signInPassword").value;
+                let hasMatch = false;
+
+                //Array of Common passwords
+                const commonPasswords = 
+                [
+                    "123456", "password", "12345678", "1234", "12345", "dragon", "qwerty", 
+                    "696969","mustang","letmein","baseball","master","michael","football","shadow",
+                    "monkey","abc123","pass","fuckme","6969","jordan","harley","ranger","iwantu",
+                    "jennifer","hunter","fuck","2000","test","batman","Trustno1","thomas","tigger",
+                    "robert","access","love","buster","1234567","soccer","hockey","killer","george","sexy"
+                ];
+
+                // no neeed to check username for the sake of the project
+                // Check if password is entered
+                if (password.trim() === "") {
+                    alert("Please enter a password.");
+                } else {
+                    // You can perform further actions here, like sending a request to a server for authentication.
+                    // For now, we'll just display an alert.
+                    if (password.length < 8) {
+                        alert("Password must be at least 8 characters long.");
+                    } else if (!/[a-z]/.test(password)) {
+                        alert("Password must contain at least one lowercase letter.");
+                    } else if (!/[A-Z]/.test(password)) {
+                        alert("Password must contain at least one uppercase letter.");
+                    } else if (!/[0-9]/.test(password)) {
+                        alert("Password must contain at least one number.");
+                    } else {
+
+                        //filter common password to the input password                
+                        for (let i = 0; i < commonPasswords.length; i++) {
+                            if (commonPasswords[i] === password) {
+                                hasMatch = true;
+                                break;
+                            }
+                        }
+
+                        if (hasMatch) {
+                            alert("Password is too common.");
+                            } else {
+                            // If there's no match, encrypt the password using AES encryption (crypto-js).
+                            alert("Sign up successful!");
+                            const secretKey = "your_secret_key"; // Replace with your own secret key
+                            const encryptedPassword = CryptoJS.AES.encrypt(inputPassword, secretKey).toString();
+                            console.log("There is no match, and the encrypted password is: " + encryptedPassword);
+
+                        }
+                    } 
+                }
+            }
+        </script>
     </div>
 </body>
 
