@@ -1,0 +1,81 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: outfit;
+  src: url("./fonts/Outfit-VariableFont_wght.ttf");
+}
+
+:root {
+  --White: hsl(0, 0%, 100%);
+  --Light-gray: hsl(212, 45%, 89%);
+  --Grayish-blue: hsl(220, 15%, 55%);
+  --Dark-blue: hsl(218, 44%, 22%);
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: outfit, sans-serif;
+  font-weight: 400;
+  background-color: var(--Light-gray);
+  font-size: 1.5rem;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 90vh;
+}
+
+.container {
+  width: min(100% - 2rem, 37.5rem);
+  margin-inline: auto;
+  background-color: var(--White);
+  padding: 1.5rem;
+  border-radius: 2rem;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.15);
+}
+
+.img-container img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 2rem;
+}
+
+h1 {
+  color: var(--Dark-blue);
+  font-weight: 700;
+  margin: 2rem 0;
+}
+
+article {
+  padding: 1rem;
+}
+
+article p {
+  color: var(--Grayish-blue);
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.container :is(h1, p) {
+  text-align: center;
+}
+
+.attribution {
+  font-size: 11px;
+  text-align: center;
+}
+.attribution a {
+  color: hsl(228, 45%, 44%);
+}
