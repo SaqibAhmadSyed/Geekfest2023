@@ -1,4 +1,4 @@
-# Geekfest2023
+# Bell Geekfest 2023 
 
 ## Theme: Online Privacy and Security
 Create an innovative solution to protect sensitive data from cyber attacks and ensure data privacy.
